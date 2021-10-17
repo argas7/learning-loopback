@@ -14,6 +14,10 @@ export class Student extends Entity {
   })
   name?: string;
 
+  @property({
+    type: 'number',
+  })
+  courseId?: number;
 
   constructor(data?: Partial<Student>) {
     super(data);
