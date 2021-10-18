@@ -4,7 +4,7 @@ import {inject} from '@loopback/core';
 import {repository} from '@loopback/repository';
 import {getJsonSchemaRef, post, requestBody} from '@loopback/rest';
 import {User} from '../models/user.model';
-import {UserRepository} from '../repositories/user.repository';
+import {Credentials, UserRepository} from '../repositories/user.repository';
 import {BcryptHasher} from '../services/hash.password.bcrypt';
 import {validateCredentials} from '../services/user-credentials.validator';
 
@@ -41,5 +41,48 @@ export class UserController {
     delete returnedUser.password;
 
     return returnedUser;
+  }
+
+  @post('/users/login', {
+    responses: {
+      '200': {
+        description: 'Token',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                token: {
+                  type: 'string',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  async login(@requestBody(
+    {
+      description: 'The input of login function',
+      required: true,
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              email: {
+                type: 'string',
+                format: 'email',
+              },
+              password: {
+                type: 'string',
+              },
+            },
+          },
+        },
+      },
+    }) credentials: Credentials): Promise<{token: string}> {
+    return Promise.resolve({token: '7813gbfoq8weghf78o23'});
   }
 }
