@@ -1,15 +1,15 @@
-import {inject, Getter} from '@loopback/core';
-import {DefaultCrudRepository, repository, BelongsToAccessor, HasOneRepositoryFactory} from '@loopback/repository';
+import {Getter, inject} from '@loopback/core';
+import {BelongsToAccessor, DefaultCrudRepository, HasOneRepositoryFactory, repository} from '@loopback/repository';
 import {PostgreSqlDataSource} from '../datasources';
-import {Student, StudentRelations, Department, Address} from '../models';
-import {DepartmentRepository} from './department.repository';
+import {Address, Department, Student, StudentRelations} from '../models';
 import {AddressRepository} from './address.repository';
+import {DepartmentRepository} from './department.repository';
 
 export class StudentRepository extends DefaultCrudRepository<
   Student,
   typeof Student.prototype.id,
   StudentRelations
-> {
+  > {
 
   public readonly department: BelongsToAccessor<Department, typeof Student.prototype.id>;
 
