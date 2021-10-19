@@ -3,6 +3,7 @@ import {inject} from '@loopback/core';
 import {repository} from '@loopback/repository';
 import {HttpErrors} from '@loopback/rest';
 import {securityId, UserProfile} from '@loopback/security';
+import {TokenServiceBidings} from '../keys';
 import {User} from '../models';
 import {Credentials, UserRepository} from '../repositories';
 import {BcryptHasher} from './hash.password.bcrypt';
@@ -11,7 +12,7 @@ export class MyUserService implements UserService<User, Credentials> {
   constructor(
     @repository(UserRepository)
     public userRepository: UserRepository,
-    @inject('service.hasher')
+    @inject(TokenServiceBidings.TOKEN_HASHER_SERVICE)
     public hasher: BcryptHasher,
   ) { }
 
