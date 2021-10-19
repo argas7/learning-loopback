@@ -8,6 +8,7 @@ import {
 } from '@loopback/rest-explorer';
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
+import {TokenServiceBidings, TokenServiceConstants} from './keys';
 import {MySequence} from './sequence';
 import {BcryptHasher} from './services/hash.password.bcrypt';
 import {JWTService} from './services/jws-service';
@@ -49,9 +50,9 @@ export class LearningLoopbackApplication extends BootMixin(
   }
 
   setupBidings(): void {
-    this.bind('service.hasher').toClass(BcryptHasher);
-    this.bind('service.user.service').toClass(MyUserService);
-    this.bind('service.jwt.service').toClass(JWTService);
-    this.bind('rounds').to(10);
+    this.bind(TokenServiceBidings.TOKEN_HASHER_SERVICE).toClass(BcryptHasher);
+    this.bind(TokenServiceBidings.TOKEN_USER_SERVICE).toClass(MyUserService);
+    this.bind(TokenServiceBidings.TOKEN_JWT_SERVICE).toClass(JWTService);
+    this.bind(TokenServiceBidings.TOKEN_ROUNDS).to(TokenServiceConstants.TOKEN_ROUNDS);
   }
 }
