@@ -6,8 +6,9 @@ import {getJsonSchemaRef, post, requestBody} from '@loopback/rest';
 import {User} from '../models/user.model';
 import {Credentials, UserRepository} from '../repositories/user.repository';
 import {BcryptHasher} from '../services/hash.password.bcrypt';
+import {JWTService} from '../services/jws-service';
 import {validateCredentials} from '../services/user-credentials.validator';
-
+import {MyUserService} from '../services/user.service';
 
 export class UserController {
   constructor(
@@ -15,6 +16,10 @@ export class UserController {
     public userRepository: UserRepository,
     @inject('service.hasher')
     public hasher: BcryptHasher,
+    @inject('service.user.service')
+    public myUserService: MyUserService,
+    @inject('service.jwt.service')
+    public jwtService: JWTService,
   ) { }
 
   @post('/signup', {
@@ -82,7 +87,14 @@ export class UserController {
           },
         },
       },
-    }) credentials: Credentials): Promise<{token: string}> {
-    return Promise.resolve({token: '7813gbfoq8weghf78o23'});
+    },
+  ) credentials: Credentials): Promise<{token: string}> {
+    const user = await this.myUserService.verifyCredentials(credentials);
+
+    const userProfile = this.myUserService.convertToUserProfile(user);
+
+    const token = await this.jwtService.genereteToken(userProfile);
+
+    return Promise.resolve({token});
   }
 }
