@@ -10,6 +10,8 @@ import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import {MySequence} from './sequence';
 import {BcryptHasher} from './services/hash.password.bcrypt';
+import {JWTService} from './services/jws-service';
+import {MyUserService} from './services/user.service';
 
 export {ApplicationConfig};
 
@@ -48,6 +50,8 @@ export class LearningLoopbackApplication extends BootMixin(
 
   setupBidings(): void {
     this.bind('service.hasher').toClass(BcryptHasher);
+    this.bind('service.user.service').toClass(MyUserService);
+    this.bind('service.jwt.service').toClass(JWTService);
     this.bind('rounds').to(10);
   }
 }
