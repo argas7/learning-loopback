@@ -1,8 +1,9 @@
 import {inject} from '@loopback/core';
-import {genSalt, hash} from 'bcryptjs';
+import {compare, genSalt, hash} from 'bcryptjs';
 
 interface PasswordHasher<T = string> {
   hashPassword(passwrod: T): Promise<T>;
+  comparePassword(password: T, storedPassword: T): Promise<boolean>;
 }
 
 export class BcryptHasher implements PasswordHasher<string> {
@@ -14,4 +15,11 @@ export class BcryptHasher implements PasswordHasher<string> {
 
     return hash(password, salt);
   }
+
+  async comparePassword(password: string, storedPassword: string): Promise<boolean> {
+    const isPasswordsMatch = await compare(password, storedPassword);
+
+    return isPasswordsMatch;
+  }
+
 }
