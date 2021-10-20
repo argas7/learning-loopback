@@ -1,3 +1,4 @@
+import {AuthenticationComponent, registerAuthenticationStrategy} from '@loopback/authentication';
 import {BootMixin} from '@loopback/boot';
 import {ApplicationConfig} from '@loopback/core';
 import {RepositoryMixin} from '@loopback/repository';
@@ -13,6 +14,7 @@ import {MySequence} from './sequence';
 import {BcryptHasher} from './services/hash.password.bcrypt';
 import {JWTService} from './services/jws-service';
 import {MyUserService} from './services/user.service';
+import {JWTStrategy} from './strategies/jwt-strategy';
 
 export {ApplicationConfig};
 
@@ -24,6 +26,9 @@ export class LearningLoopbackApplication extends BootMixin(
 
     // set up bidings
     this.setupBidings()
+
+    registerAuthenticationStrategy(this, JWTStrategy);
+    this.component(AuthenticationComponent);
 
     // Set up the custom sequence
     this.sequence(MySequence);
