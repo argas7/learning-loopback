@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
@@ -23,6 +24,7 @@ import {
 } from '@loopback/rest';
 import {Job} from '../models';
 import {JobRepository} from '../repositories';
+import {PermissionKeys} from '../strategies/authorization-keys';
 
 export class JobController {
   constructor(
@@ -37,6 +39,7 @@ export class JobController {
     description: 'Job model instance',
     content: {'application/json': {schema: getModelSchemaRef(Job)}},
   })
+  @authenticate('jwt', {strategy: 'jwt', options: {required: [PermissionKeys.CreateJob]}})
   async create(
     @requestBody({
       content: {
