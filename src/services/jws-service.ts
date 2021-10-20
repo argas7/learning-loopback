@@ -18,4 +18,22 @@ export class JWTService {
     return token;
   }
 
+  async verifyToken(token: string): Promise<UserProfile> {
+    if (!token) {
+      throw new HttpErrors.Unauthorized('Token is null');
+    }
+
+    try {
+      const decryptedToken = jwt.verify(token, process.env.JWT_SECRET as string);
+
+      const userProfile = Object.assign({
+        user: decryptedToken
+      });
+
+      return userProfile;
+    } catch (error) {
+      throw new HttpErrors.Unauthorized(`Error was here: ${error.message}`);
+    }
+  }
+
 };
