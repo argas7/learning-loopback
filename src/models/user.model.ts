@@ -27,6 +27,8 @@ export class User extends Entity {
   })
   name: string;
 
+  @property.array(String)
+  permissions: String[];
 
   constructor(data?: Partial<User>) {
     super(data);

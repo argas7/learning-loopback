@@ -12,6 +12,7 @@ import {BcryptHasher} from '../services/hash.password.bcrypt';
 import {JWTService} from '../services/jws-service';
 import {validateCredentials} from '../services/user-credentials.validator';
 import {MyUserService} from '../services/user.service';
+import {PermissionKeys} from '../strategies/authorization-keys';
 
 export class UserController {
   constructor(
@@ -39,6 +40,8 @@ export class UserController {
     validateCredentials({email: userData.email, password: userData.password});
 
     const hashedPassword = await this.hasher.hashPassword(userData.password);
+
+    userData.permissions = [PermissionKeys.AccessAuthFeature];
 
     const savedUser = await this.userRepository.create({
       ...userData,
