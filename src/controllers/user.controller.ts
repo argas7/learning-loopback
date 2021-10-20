@@ -1,8 +1,10 @@
 // Uncomment these imports to begin using these cool features!
 
+import {authenticate, AuthenticationBindings} from '@loopback/authentication';
 import {inject} from '@loopback/core';
 import {repository} from '@loopback/repository';
-import {getJsonSchemaRef, post, requestBody} from '@loopback/rest';
+import {get, getJsonSchemaRef, post, requestBody} from '@loopback/rest';
+import {UserProfile} from '@loopback/security';
 import {TokenServiceBidings} from '../keys';
 import {User} from '../models/user.model';
 import {Credentials, UserRepository} from '../repositories/user.repository';
@@ -97,5 +99,15 @@ export class UserController {
     const token = await this.jwtService.genereteToken(userProfile);
 
     return Promise.resolve({token});
+  }
+
+  @get('/users/me')
+  @authenticate('jwt')
+  async me(
+    @inject(AuthenticationBindings.CURRENT_USER)
+    currentUser: UserProfile,
+  ): Promise<UserProfile> {
+
+    return Promise.resolve(currentUser);
   }
 }
